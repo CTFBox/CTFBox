@@ -1,0 +1,52 @@
+version: '3'
+services:
+  application:
+    build:
+      context: .
+      target: development
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 60s
+    command: task -w
+    restart: always
+    environment:
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: ctf_box
+    ports:
+      - "6000:8080"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:10.5
+    restart: always
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: ctf_box
+      TZ: Asia/Tokyo
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_bin']
+    expose:
+      - "3306"
+    ports:
+      - "6001:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+  adminer:
+    image: adminer:4.7
+    restart: always
+    environment:
+      ADMINER_DESIGN: nette
+    expose:
+      - "8080"
+    ports:
+      - "6002:8080"
+
+volumes:
+  db-data:
+    driver: local

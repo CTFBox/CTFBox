@@ -2,36 +2,37 @@ package main
 
 import (
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	"os"
 )
 
 var (
-	MARIADB_HOSTNAME = os.Getenv("MARIADB_HOSTNAME")
-	MARIADB_DATABASE = os.Getenv("MARIADB_DATABASE")
-	MARIADB_USERNAME = os.Getenv("MARIADB_USERNAME")
-	MARIADB_PASSWORD = os.Getenv("MARIADB_PASSWORD")
+	MYSQL_HOSTNAME = os.Getenv("MYSQL_HOSTNAME")
+	MYSQL_DATABASE = os.Getenv("MYSQL_DATABASE")
+	MYSQL_USERNAME = os.Getenv("MYSQL_USERNAME")
+	MYSQL_PASSWORD = os.Getenv("MYSQL_PASSWORD")
 )
 
 func SetupDatabase() (*gorm.DB, error) {
 	var err error
 	//tmp
-	if MARIADB_HOSTNAME == "" {
-		MARIADB_HOSTNAME = "localhost"
+	if MYSQL_HOSTNAME == "" {
+		MYSQL_HOSTNAME = "db"
 	}
-	if MARIADB_DATABASE == "" {
-		MARIADB_DATABASE = "ctf_box"
+	if MYSQL_DATABASE == "" {
+		MYSQL_DATABASE = "ctf_box"
 	}
-	if MARIADB_USERNAME == "" {
-		MARIADB_USERNAME = "root"
+	if MYSQL_USERNAME == "" {
+		MYSQL_USERNAME = "root"
 	}
 
-	if MARIADB_PASSWORD == "" {
-		MARIADB_PASSWORD = "password"
+	if MYSQL_PASSWORD == "" {
+		MYSQL_PASSWORD = "password"
 	}
 
 	// データベース接続
-	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local", MARIADB_USERNAME, MARIADB_PASSWORD, MARIADB_HOSTNAME, MARIADB_DATABASE))
+	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local", MYSQL_USERNAME, MYSQL_PASSWORD, MYSQL_HOSTNAME, MYSQL_DATABASE))
 	if err != nil {
 		return nil, err
 	}
@@ -40,8 +41,8 @@ func SetupDatabase() (*gorm.DB, error) {
 	}
 
 	db.DB().SetMaxIdleConns(1024) // デフォルトだと2
-	db.DB().SetConnMaxLifetime(0)      // 一応セット
-	db.DB().SetConnMaxIdleTime(0)      // 一応セット go1.15以上
+	db.DB().SetConnMaxLifetime(0) // 一応セット
+	db.DB().SetConnMaxIdleTime(0) // 一応セット go1.15以上
 
 	return db, nil
 }
