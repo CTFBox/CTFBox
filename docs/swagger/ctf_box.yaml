@@ -1,12 +1,90 @@
 openapi: 3.0.0
 info:
   title: CTFBox
-  version: '1.0'
+  version: "1.0"
   contact:
     name: CTFBox
-    url: 'https://github.com/CTFBox/CTFBox'
+    url: "https://github.com/CTFBox/CTFBox"
   description: CTFBox API
 servers:
-  - url: 'http://localhost:1323/api'
+  - url: "http://localhost:1323/api"
     description: local
+paths:
+  /questions:
+    get:
+      responses:
+        "200":
+          description: "Question List"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/question"
 
+  /questions/{questionID}:
+    get:
+      parameters:
+        - in: path
+          name: questionID
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "ok"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/question"
+    post:
+      parameters:
+        - in: path
+          name: questionID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        $ref: "#/components/requestBodies/flagSubmission"
+      responses:
+        "200":
+          description: "Result"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resOfFlagSubmission"
+
+components:
+  schemas:
+    question:
+      type: object
+      properties:
+        questionID:
+          type: integer
+          example: "1001"
+        title:
+          type: string
+          example: "Start of CTFBox"
+        detail:
+          type: string
+          example: "Welcome to CTFBox!"
+
+    flagSubmission:
+      type: object
+      properties:
+        flag:
+          type: string
+          example: "{ctfhogehogehoge}"
+
+    resOfFlagSubmission:
+      type: object
+      properties:
+        isCorrect:
+          type: boolean
+
+  requestBodies:
+    flagSubmission:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/flagSubmission"
