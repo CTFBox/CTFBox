@@ -1,9 +1,10 @@
 package router
 
 import (
-	"github.com/CTFBox/CTFBox/repository"
 	"net/http"
 	"time"
+
+	"github.com/CTFBox/CTFBox/repository"
 
 	"github.com/gorilla/sessions"
 	"github.com/jinzhu/gorm"
@@ -30,19 +31,6 @@ func (h *Handlers) SetupRoute(db *gorm.DB) *echo.Echo {
 
 	// echo初期化
 	e := echo.New()
-	e.HTTPErrorHandler = func(err error, c echo.Context) {
-		e, ok := err.(*echo.HTTPError)
-		if ok {
-			if e.Internal != nil {
-				c.Set("Error", e.Internal)
-				if herr, ok := e.Internal.(*echo.HTTPError); ok {
-					e = herr
-				}
-			}
-		} else {
-			c.String(http.StatusInternalServerError, "")
-		}
-	}
 	e.Use(middleware.Recover())
 	e.Use(middleware.Secure())
 
