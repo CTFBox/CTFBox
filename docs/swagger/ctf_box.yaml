@@ -10,81 +10,182 @@ servers:
   - url: "http://localhost:1323/api"
     description: local
 paths:
-  /questions:
+  '/challenges':
     get:
+      summary: 問題の一覧を取得
+      description: |-
+        問題の一覧を取得します。
+      parameters:
+        - $ref: '#/components/parameters/limitInQuery'
+        - $ref: '#/components/parameters/offsetInQuery'
+        - $ref: '#/components/parameters/orderInQuery'
+        - $ref: '#/components/parameters/orderAttributeInQuery'
       responses:
         "200":
-          description: "Question List"
+          description: OK
           content:
             application/json:
               schema:
+                description: 問題の配列
                 type: array
                 items:
-                  $ref: "#/components/schemas/question"
-
-  /questions/{questionID}:
+                  $ref: "#/components/schemas/Challenge"
+  '/challenges/{challengeId}':
     get:
+      summary: 問題の詳細を取得
+      description: |-
+        問題の詳細を取得します。
       parameters:
-        - in: path
-          name: questionID
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/challengeIdInPath'
       responses:
         "200":
-          description: "ok"
+          description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/question"
+                $ref: "#/components/schemas/ChallengeDetail"
     post:
+      summary: 解答を提出
+      description: |-
+        フラグを提出し、正誤判定を行います。
       parameters:
-        - in: path
-          name: questionID
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/challengeIdInPath'
       requestBody:
-        $ref: "#/components/requestBodies/flagSubmission"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Flag"
       responses:
         "200":
-          description: "Result"
+          description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/resOfFlagSubmission"
+                $ref: "#/components/schemas/Judgement"
 
 components:
   schemas:
-    question:
+    Challenge:
       type: object
       properties:
-        questionID:
-          type: integer
-          example: "1001"
+        challengeID:
+          type: string
+          format: uuid
         title:
           type: string
-          example: "Start of CTFBox"
-        detail:
+          example: "Welcome!"
+        score:
+          type: integer
+          example: 50
+        solved:
+          type: integer
+          example: 125
+    ChallengeDetail:
+      type: object
+      properties:
+        challengeID:
           type: string
-          example: "Welcome to CTFBox!"
-
-    flagSubmission:
+          format: uuid
+        title:
+          type: string
+          example: "Welcome!"
+        score:
+          type: integer
+          example: 50
+        solved:
+          type: integer
+          example: 125
+        star:
+          type: integer
+          example: 327
+        hints:
+          type: array
+          items:
+            type: object
+            properties:
+              hintId:
+                type: string
+                format: uuid
+              hintNumber:
+                type: integer
+                example: 1
+              deduction: 
+                type: integer
+                example: 50
+    Hint:
+      type: object
+      properties:
+        challengeID:
+          type: string
+          format: uuid
+        hintId:
+          type: string
+          format: uuid
+        hintNumber:
+          type: integer
+        deduction:
+          type: integer
+        text:
+          type: string
+          description: ヒントの本文
+    Flag:
       type: object
       properties:
         flag:
           type: string
-          example: "{ctfhogehogehoge}"
-
-    resOfFlagSubmission:
+          example: "flag{welcom_to_ctfbox}"
+    Judgement:
       type: object
       properties:
         isCorrect:
           type: boolean
+  parameters:
+    challengeIdInPath:
+      in: path
+      name: challengeId
+      required: true
+      schema:
+        type: string
+        format: uuid
+    limitInQuery:
+      in: query
+      name: limit
+      schema:
+        type: integer
+        default: 0
+        minimum: 1
+        maximum: 200
+      description: 取得する件数
+      example: 50
+    offsetInQuery:
+      in: query
+      name: offset
+      schema:
+        type: integer
+        default: 0
+      description: 取得するオフセット
+      example: 150
+    orderInQuery:
+      in: query
+      name: order
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+        default: desc
+      description: 昇順か降順か
+    orderAttributeInQuery:
+      in: query
+      name: orderAttr
+      schema:
+        type: string
+        enum:
+          - posted_at
+          - challenged
+        default: posted_at
+      description: ソートに使用する属性
+  responses:
+    404NotFound:
+      description: The specified resource was not found.
 
-  requestBodies:
-    flagSubmission:
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/flagSubmission"
