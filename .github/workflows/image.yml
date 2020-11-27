@@ -10,7 +10,8 @@ env:
   IMAGE_TAG: latest
 
 jobs:
-  build:
+  image:
+    name: Build Docker Image
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
