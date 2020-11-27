@@ -2,12 +2,13 @@ package main
 
 import (
 	"context"
-	"github.com/CTFBox/CTFBox/repository"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/CTFBox/CTFBox/repository"
 
 	"github.com/CTFBox/CTFBox/router"
 	"github.com/gorilla/sessions"
@@ -52,7 +53,7 @@ func main() {
 			e.Logger.Info("shutting down the server")
 		}
 	}()
-	quit := make(chan os.Signal)
+	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt)
 	<-quit
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
