@@ -1,0 +1,35 @@
+name: Docker Image
+
+on: 
+  push:
+    branches: 
+      - main
+
+env:
+  IMAGE_NAME: ctf_box
+  IMAGE_TAG: latest
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login GitHub Registry
+        run: docker login docker.pkg.github.com -u CTFBox -p ${{ secrets.GITHUB_TOKEN }}
+      - name: Build Image
+        run: docker build -t docker.pkg.github.com/CTFBox/CTFBox/${IMAGE_NAME}:${IMAGE_TAG} .
+      - name: Push image to GitHub Registry
+        run: docker push docker.pkg.github.com/CTFBox/CTFBox/${IMAGE_NAME}:${IMAGE_TAG}
+  scan:
+    name: Scan Image Vulnerability
+    runs-on: ubuntu-18.04
+    needs: [image]
+    steps:
+      - name: Login GitHub Registry
+        run: docker login docker.pkg.github.com -u CTFBox -p ${{ secrets.GITHUB_TOKEN }}
+      - name: Pull docker image
+        run: docker pull docker.pkg.github.com/CTFBox/CTFBox/${IMAGE_NAME}:${IMAGE_TAG}
+      - uses: homoluctus/gitrivy@v1.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          image: docker.pkg.github.com/CTFBox/CTFBox/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
