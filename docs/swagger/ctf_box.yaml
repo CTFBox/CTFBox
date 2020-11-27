@@ -15,6 +15,8 @@ paths:
       summary: 問題の一覧を取得
       description: |-
         問題の一覧を取得します。
+      tags:
+        - challenge
       parameters:
         - $ref: '#/components/parameters/limitInQuery'
         - $ref: '#/components/parameters/offsetInQuery'
@@ -35,6 +37,8 @@ paths:
       summary: 問題の詳細を取得
       description: |-
         問題の詳細を取得します。
+      tags:
+        - challenge
       parameters:
         - $ref: '#/components/parameters/challengeIdInPath'
       responses:
@@ -48,6 +52,8 @@ paths:
       summary: 解答を提出
       description: |-
         フラグを提出し、正誤判定を行います。
+      tags:
+        - challenge
       parameters:
         - $ref: '#/components/parameters/challengeIdInPath'
       requestBody:
@@ -189,3 +195,12 @@ components:
     404NotFound:
       description: The specified resource was not found.
 
+tags:
+  - name: challenge
+    description: 問題API
+  - name: user
+    description: ユーザーAPI
+  - name: me
+    description: マイユーザーAPI
+  - name: authentication
+    description: 認証API
