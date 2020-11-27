@@ -29,8 +29,8 @@ jobs:
       - name: Login GitHub Registry
         run: docker login docker.pkg.github.com -u CTFBox -p ${{ secrets.GITHUB_TOKEN }}
       - name: Pull docker image
-        run: docker pull docker.pkg.github.com/CTFBox/CTFBox/${IMAGE_NAME}:${IMAGE_TAG}
+        run: docker pull docker.pkg.github.com/ctfbox/ctfbox/${IMAGE_NAME}:${IMAGE_TAG}
       - uses: homoluctus/gitrivy@v1.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          image: docker.pkg.github.com/CTFBox/CTFBox/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          image: docker.pkg.github.com/ctfbox/ctfbox/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
