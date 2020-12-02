@@ -1,12 +1,206 @@
 openapi: 3.0.0
 info:
   title: CTFBox
-  version: '1.0'
+  version: "1.0"
   contact:
     name: CTFBox
-    url: 'https://github.com/CTFBox/CTFBox'
+    url: "https://github.com/CTFBox/CTFBox"
   description: CTFBox API
 servers:
-  - url: 'http://localhost:1323/api'
+  - url: "http://localhost:1323/api"
     description: local
+paths:
+  '/challenges':
+    get:
+      summary: 問題の一覧を取得
+      description: |-
+        問題の一覧を取得します。
+      tags:
+        - challenge
+      parameters:
+        - $ref: '#/components/parameters/limitInQuery'
+        - $ref: '#/components/parameters/offsetInQuery'
+        - $ref: '#/components/parameters/orderInQuery'
+        - $ref: '#/components/parameters/orderAttributeInQuery'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: 問題の配列
+                type: array
+                items:
+                  $ref: "#/components/schemas/Challenge"
+  '/challenges/{challengeId}':
+    get:
+      summary: 問題の詳細を取得
+      description: |-
+        問題の詳細を取得します。
+      tags:
+        - challenge
+      parameters:
+        - $ref: '#/components/parameters/challengeIdInPath'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChallengeDetail"
+    post:
+      summary: 解答を提出
+      description: |-
+        フラグを提出し、正誤判定を行います。
+      tags:
+        - challenge
+      parameters:
+        - $ref: '#/components/parameters/challengeIdInPath'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Flag"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Judgement"
 
+components:
+  schemas:
+    Challenge:
+      type: object
+      properties:
+        challengeID:
+          type: string
+          format: uuid
+        title:
+          type: string
+          example: "Welcome!"
+        score:
+          type: integer
+          example: 50
+        solved:
+          type: integer
+          example: 125
+    ChallengeDetail:
+      type: object
+      properties:
+        challengeID:
+          type: string
+          format: uuid
+        title:
+          type: string
+          example: "Welcome!"
+        score:
+          type: integer
+          example: 50
+        solved:
+          type: integer
+          example: 125
+        star:
+          type: integer
+          example: 327
+        hints:
+          type: array
+          items:
+            type: object
+            properties:
+              hintId:
+                type: string
+                format: uuid
+              hintNumber:
+                type: integer
+                example: 1
+              deduction: 
+                type: integer
+                example: 50
+    Hint:
+      type: object
+      properties:
+        challengeID:
+          type: string
+          format: uuid
+        hintId:
+          type: string
+          format: uuid
+        hintNumber:
+          type: integer
+        deduction:
+          type: integer
+        text:
+          type: string
+          description: ヒントの本文
+    Flag:
+      type: object
+      properties:
+        flag:
+          type: string
+          example: "flag{welcom_to_ctfbox}"
+    Judgement:
+      type: object
+      properties:
+        isCorrect:
+          type: boolean
+  parameters:
+    challengeIdInPath:
+      in: path
+      name: challengeId
+      required: true
+      schema:
+        type: string
+        format: uuid
+    limitInQuery:
+      in: query
+      name: limit
+      schema:
+        type: integer
+        default: 0
+        minimum: 1
+        maximum: 200
+      description: 取得する件数
+      example: 50
+    offsetInQuery:
+      in: query
+      name: offset
+      schema:
+        type: integer
+        default: 0
+      description: 取得するオフセット
+      example: 150
+    orderInQuery:
+      in: query
+      name: order
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+        default: desc
+      description: 昇順か降順か
+    orderAttributeInQuery:
+      in: query
+      name: orderAttr
+      schema:
+        type: string
+        enum:
+          - posted_at
+          - challenged
+        default: posted_at
+      description: ソートに使用する属性
+  responses:
+    404NotFound:
+      description: The specified resource was not found.
+
+tags:
+  - name: challenge
+    description: 問題API
+  - name: user
+    description: ユーザーAPI
+  - name: me
+    description: マイユーザーAPI
+  - name: authentication
+    description: 認証API
