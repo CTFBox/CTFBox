@@ -6,6 +6,7 @@ type Problem struct {
 	ID uuid.UUID `db:"id"`
 	// add labels
 	title string 
+	flag string
 	score int
 	solved int
 	star int
