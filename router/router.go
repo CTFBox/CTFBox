@@ -51,9 +51,11 @@ func (h *Handlers) SetupRoute(db *gorm.DB) *echo.Echo {
 	// API定義 (/api)
 	api := e.Group("/api")
 	{
-		apiProblem := api.Group("/problem")
+		apiChallenges := api.Group("/challenges")
 		{
-			apiProblem.GET("/:problemID", h.HandleGetProblem)
+			apiChallenges.GET("/", h.HandleGetListOfProblem)
+			apiChallenges.GET("/:challengeId", h.HandleGetProblem)
+			apiChallenges.POST("/:challengeId", h.HandlePostFlag)
 		}
 
 	}
