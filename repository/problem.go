@@ -14,5 +14,5 @@ type Problem struct {
 type ProblemRepository interface {
 	GetProblem(id string) (*Problem, error)
 	GetListOfProblem() ([]*Problem, error)
-	JudgeFlag(id string) (bool, error)
+	JudgeFlag(id string, flag string) (bool, error)
 }

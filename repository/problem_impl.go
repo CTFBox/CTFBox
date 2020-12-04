@@ -10,7 +10,7 @@ func (repo *GormRepository) GetListOfProblem() ([]*Problem, error) {
 	return nil, nil
 }
 
-func (repo *GormRepository) JudgeFlag(id string) (bool, error) {
+func (repo *GormRepository) JudgeFlag(id string,flag string) (bool, error) {
 	// not implemented yet
 	return false, nil
 }
