@@ -6,9 +6,9 @@ type Problem struct {
 	ID uuid.UUID `db:"id"`
 	// add labels
 	title string 
-	score: int,
-	solved: int
-	star: int
+	score int
+	solved int
+	star int
 }
 
 type ProblemRepository interface {
