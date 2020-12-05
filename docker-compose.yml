@@ -14,7 +14,7 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: ctf_box
     ports:
-      - "6000:8080"
+      - "6000:3000"
     volumes:
       - .:/app
     depends_on:
