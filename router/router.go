@@ -53,7 +53,7 @@ func (h *Handlers) SetupRoute(db *gorm.DB) *echo.Echo {
 	{
 		apiChallenges := api.Group("/challenges")
 		{
-			apiChallenges.GET("/", h.HandleGetListOfProblem)
+			apiChallenges.GET("", h.HandleGetListOfProblem)
 			apiChallenges.GET("/:challengeId", h.HandleGetProblem)
 			apiChallenges.POST("/:challengeId", h.HandlePostFlag)
 		}
