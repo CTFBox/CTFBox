@@ -8,6 +8,7 @@
 *.dll
 *.so
 *.dylib
+ctf_box
 
 # Test binary, built with `go test -c`
 *.test
