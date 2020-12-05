@@ -18,5 +18,9 @@ func (repo *GormRepository) GetListOfProblem() ([]*Problem, error) {
 
 func (repo *GormRepository) JudgeFlag(id string, flag string) (bool, error) {
 	// not implemented yet
-	return false, nil
+	problem := Problem{}
+	repo.db.First(&problem, "id = ?", id)
+
+	res := (problem.Flag == flag)
+	return res, nil
 }

@@ -31,5 +31,26 @@ func (h *Handlers) HandleGetListOfProblem(c echo.Context) error {
 
 func (h *Handlers) HandlePostFlag(c echo.Context) error {
 	// not implemented yet
-	return nil
+
+	type submittedFlag struct {
+		Flag string `json:"flag"`
+	}
+
+	type redOfSubmit struct {
+		IsCorrect bool `json:"isCorrect"`
+	}
+
+	flag := new(submittedFlag)
+	if err := c.Bind(flag); err != nil {
+		return c.String(http.StatusBadRequest, "Request is failed: "+err.Error())
+	}
+
+	res, err := h.Repo.JudgeFlag(c.Param("challengeId"), flag.Flag)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, redOfSubmit{
+		IsCorrect: res,
+	})
 }
