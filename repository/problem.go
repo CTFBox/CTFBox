@@ -5,11 +5,11 @@ import "github.com/gofrs/uuid"
 type Problem struct {
 	ID uuid.UUID `db:"id"`
 	// add labels
-	title string 
-	flag string
-	score int
-	solved int
-	star int
+	Title  string
+	Flag   string
+	Score  int
+	Solved int
+	Star   int
 }
 
 type ProblemRepository interface {
