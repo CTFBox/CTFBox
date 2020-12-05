@@ -8,7 +8,14 @@ import (
 
 func (h *Handlers) HandleGetProblem(c echo.Context) error {
 	// not implemented yet
-	return nil
+
+	problemID := c.Param("challengeId")
+	problem, err := h.Repo.GetProblem(problemID)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, problem)
 }
 
 func (h *Handlers) HandleGetListOfProblem(c echo.Context) error {

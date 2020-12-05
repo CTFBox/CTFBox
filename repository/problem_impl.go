@@ -2,7 +2,11 @@ package repository
 
 func (repo *GormRepository) GetProblem(id string) (*Problem, error) {
 	// not implemented yet
-	return nil, nil
+
+	problem := Problem{}
+	repo.db.First(&problem, "id = ?", id)
+
+	return &problem, nil
 }
 
 func (repo *GormRepository) GetListOfProblem() ([]*Problem, error) {
