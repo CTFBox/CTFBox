@@ -1,6 +1,10 @@
 package router
 
-import "github.com/labstack/echo/v4"
+import (
+	"net/http"
+
+	"github.com/labstack/echo/v4"
+)
 
 func (h *Handlers) HandleGetProblem(c echo.Context) error {
 	// not implemented yet
@@ -9,12 +13,16 @@ func (h *Handlers) HandleGetProblem(c echo.Context) error {
 
 func (h *Handlers) HandleGetListOfProblem(c echo.Context) error {
 	// not implemented yet
-	return nil
-}
+	problems, err := h.Repo.GetListOfProblem()
 
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, problems)
+}
 
 func (h *Handlers) HandlePostFlag(c echo.Context) error {
 	// not implemented yet
 	return nil
 }
-
