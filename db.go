@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"os"
+
+	"github.com/CTFBox/CTFBox/repository"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
-	"os"
 )
 
 var (
@@ -48,5 +50,6 @@ func SetupDatabase() (*gorm.DB, error) {
 }
 
 func initDB(db *gorm.DB) error {
+	db.AutoMigrate(&(repository.Problem{}))
 	return nil
 }
