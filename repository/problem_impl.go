@@ -4,7 +4,7 @@ func (repo *GormRepository) GetProblem(id string) (*Problem, error) {
 	// not implemented yet
 
 	problem := Problem{}
-	repo.db.First(&problem, "id = ?", id)
+	repo.db.Select([]string{"id", "title", "score", "solved", "star"}).First(&problem, "id = ?", id)
 
 	return &problem, nil
 }
