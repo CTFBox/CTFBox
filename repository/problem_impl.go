@@ -7,11 +7,12 @@ func (repo *GormRepository) GetProblem(id string) (*Problem, error) {
 
 func (repo *GormRepository) GetListOfProblem() ([]*Problem, error) {
 	// not implemented yet
-	return nil, nil
+	problems := []*Problem{}
+	repo.db.Find(&problems)
+	return problems, nil
 }
 
-func (repo *GormRepository) JudgeFlag(id string,flag string) (bool, error) {
+func (repo *GormRepository) JudgeFlag(id string, flag string) (bool, error) {
 	// not implemented yet
 	return false, nil
 }
-
