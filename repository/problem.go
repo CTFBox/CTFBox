@@ -3,7 +3,7 @@ package repository
 import "github.com/gofrs/uuid"
 
 type Problem struct {
-	ID uuid.UUID `db:"id"`
+	ID uuid.UUID `db:"id" json:"challengeID"`
 	// add labels
 	Title  string
 	Flag   string

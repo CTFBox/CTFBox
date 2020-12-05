@@ -12,7 +12,7 @@ func (repo *GormRepository) GetProblem(id string) (*Problem, error) {
 func (repo *GormRepository) GetListOfProblem() ([]*Problem, error) {
 	// not implemented yet
 	problems := []*Problem{}
-	repo.db.Find(&problems)
+	repo.db.Select([]string{"id", "title", "score", "solved"}).Find(&problems)
 	return problems, nil
 }
 
