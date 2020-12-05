@@ -6,6 +6,7 @@ import (
 
 	"github.com/CTFBox/CTFBox/repository"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gofrs/uuid"
 	"github.com/jinzhu/gorm"
 )
 
@@ -51,5 +52,18 @@ func SetupDatabase() (*gorm.DB, error) {
 
 func initDB(db *gorm.DB) error {
 	db.AutoMigrate(&(repository.Problem{}))
+
+	genedUUid, _ := uuid.NewV4()
+	testProblem := repository.Problem{
+		ID:     genedUUid,
+		Title:  "Test",
+		Flag:   "flag{test}",
+		Score:  300,
+		Star:   10,
+		Solved: 10,
+	}
+
+	db.Create(&testProblem)
+
 	return nil
 }
